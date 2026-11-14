@@ -33,7 +33,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     networks:
-      -inception
+      - inception
     restart: always
 
   nginx:
@@ -54,30 +54,29 @@ services:
       - inception
     restart: always
 
-  volumes:
-    mariadb_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /home/ssukhija/data/mariadb
-    wordpress_data:
-      driver: local
-      driver_opts:
-        type: none
-        o: bind
-        device: /home/ssukhija/data/wordpress
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ssukhija/data/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ssukhija/data/wordpress
 
-  networks:
-    inception:
-      name: inceptNet
-      driver: bridge
+networks:
+  inception:
+    name: inceptNet
+    driver: bridge
 
-  secrets:
-    db_root_password:
-      file: ../secrets/db_root_password.txt
-    db_password:
-      file: ../secrets/db_password.txt
-    credentials:
-      file: ../secrets/wp_creds.txt
-    
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
+  wp_creds:
+    file: ../secrets/wp_creds.txt
