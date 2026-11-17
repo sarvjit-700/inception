@@ -47,7 +47,7 @@ services:
     env_file:
       - .env
     ports:
-      - "443:443"
+      - "4443:4443"
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -60,13 +60,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/ssukhija/data/mariadb
+      device: ${HOME}/data/mariadb
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/ssukhija/data/wordpress
+      device: ${HOME}/data/wordpress
 
 networks:
   inception:
