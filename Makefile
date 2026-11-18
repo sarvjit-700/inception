@@ -30,4 +30,7 @@ logs:
 ps:
 	docker compose -f $(COMPOSE_FILE) ps
 
-.PHONY: all up down stop start clean fclean re logs ps
+nginx:
+	docker compose -f $(COMPOSE_FILE) up -d --build nginx
+
+.PHONY: all up down stop start clean fclean re logs ps  nginx

@@ -9,6 +9,6 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-EXPOSE 4443
+EXPOSE 443
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

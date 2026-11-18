@@ -7,7 +7,7 @@ DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(grep '^WP_ADMIN_PASSWORD=' /run/secrets/wp_creds | cut -d '=' -f2-)
 WP_USER_PASSWORD=$(grep '^WP_USER_PASSWORD=' /run/secrets/wp_creds | cut -d '=' -f2-)
 
-until mariadb-admin ping -h mariadb -u "${MYSQL_USER}" -p"{DB_PASSWORD}" --silent; do
+until mariadb-admin ping -h mariadb -u "${MYSQL_USER}" -p"${DB_PASSWORD}" --silent; do
     sleep 1
 done
 
@@ -33,6 +33,12 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
         --role=author \
         --user_pass="${WP_USER_PASSWORD}" \
         --allow-root
+    CAT_ID=$(wp term create category "Funnies" \
+        --slug="funnies" \
+        --description="Funny posts" \
+        --porcelain \
+        --allow-root)
+    wp option update default_category "{CAT_ID}" --allow-root
 fi
 
 chown -R www-data:www-data /var/www/html
