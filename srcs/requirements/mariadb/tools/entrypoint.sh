@@ -7,7 +7,7 @@ chown -R mysql:mysql /run/mysqld /var/lib/mysql
 DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 DB_PASSWORD=$(cat /run/secrets/db_password)
 
-if [ ! -d "var/lib/mysql/${MYSQL_DATABASE}" ]; then
+if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
     echo "Initializing database..."
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql --skip-test-db > /dev/null
 

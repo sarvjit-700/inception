@@ -14,26 +14,26 @@ This stack hosts a self-contained WordPress website running across three isolate
 
 Run all commands from the root of the repository ('~/inception'):
 
-* Build and start all services in the background:**
+* Build and start all services in the background:
 ```bash
 make
 ```
-* Stop and remove the running containers and network (preserving the website data):**
+* Stop and remove the running containers and network (preserving the website data):
 ```bash
 docker compose -f srcs/docker-compose.yml down
 ```
-* Stop services temporarily without removing containers:**
+* Stop services temporarily without removing containers:
 ```bash
-docker compose -f srcs/dockers-compose.yml stop
+docker compose -f srcs/docker-compose.yml stop
 ```
 
-## 3. Accessing the website and Administration Panel
+## 3. Accessing the Website and Administration Panel
 
 ### Browser URLs :
 
 Public Website: https://ssukhija.42.fr
 
-WordPress Admin Dashboard: http://ssukhija.42.fr/wp-admin
+WordPress Admin Dashboard: https://ssukhija.42.fr/wp-admin
 
 >[Note on TLS Warning]: *Because NGINX uses a self-signed SSL/TLS certificate, the browser will display a security warning on first visit. Click **Advanced** and choose **Accept the Risk and Continue** (Firefox) or **Proceed to ssukhija.42.fr (Chromium/Chrome)**. Plain HTTP (http://ssukhija.42.fr on port 80) is intentionally disabled.*
 
@@ -47,13 +47,13 @@ All configuration and password files live locally on the host and are excluded f
 
 * Secrets Directory ( secrets/ ): Stores all passwords in plain-text files mounted read-only inside containers at /run/secrets/ :
   
-    * secrets/db_root_password.txt - MariaDB password for root **password**.
+    * secrets/db_root_password.txt - MariaDB password for root.
 
-    * secrets/db_password.txt - **MariaDB password for** wp_user.
+    * secrets/db_password.txt - MariaDB password for wp_user.
 
-    * secrets/wp_creds.txt ** - WordPress administrator (**
-      WP_ADMIN_PASSWORD **) and secondary author (**
-      WP_USER_PASSWORD **) passwords.**
+    * secrets/wp_creds.txt - WordPress administrator (
+      WP_ADMIN_PASSWORD ) and secondary author (
+      WP_USER_PASSWORD ) passwords.
 
 ### Updating Credentials
   * Before initial setup: Edit the values inside secrets/*.txt and srcs/.env before running make .

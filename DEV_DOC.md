@@ -57,7 +57,7 @@ make
 ```
 This creates `/home/ssukhija/data/mariadb` and `/home/ssukhija/data/wordpress` on the host, builds each custom image from `debian:bookworm`, creates the `inceptNet` bridge network, and starts `mariadb`, `wordpress`, and `nginx` in detached mode with `restart: always`.
 
-* **Rebuild a single servie after modifying its 'Dockerfile', config, or 'entrypoint.sh':**
+* **Rebuild a single service after modifying its 'Dockerfile', config, or 'entrypoint.sh':**
 ```bash
 docker compose -f srcs/docker-compose.yml up -d --build <service_name>
 ```
@@ -129,6 +129,6 @@ Each service uses a POSIX `/bin/sh` `entrypoint.sh` script that checks whether p
 Because existing directories and config files are skipped on subsequent boots, all database records, uploaded media, and user changes survive `docker compose down && make` as well as a full VM `sudo reboot`.
 
 ### Runtime Secrets & Process Model
-* **Docker Secrets:** Sensitive credntials in `secrets/` are mounted read-only in memory at `/run/secrets/` (`db_root_password`, `db_password`, `wp_creds`) rather than baked into image layers or passed as plain environment variables.
-* **PID 1 Execution:** Every `entrypoint.sh` end with `exec` (`exec mariadb`, `exec php-fpm8.2 -F`, `exec nginx -g "daemon off;"`) so the primary daemon runs in the foreground as PID 1 and receives `SIGTERM` signals cleanly during shutdown.
+* **Docker Secrets:** Sensitive credentials in `secrets/` are mounted read-only in memory at `/run/secrets/` (`db_root_password`, `db_password`, `wp_creds`) rather than baked into image layers or passed as plain environment variables.
+* **PID 1 Execution:** Every `entrypoint.sh` ends with `exec` (`exec mariadb`, `exec php-fpm8.2 -F`, `exec nginx -g "daemon off;"`) so the primary daemon runs in the foreground as PID 1 and receives `SIGTERM` signals cleanly during shutdown.
 
