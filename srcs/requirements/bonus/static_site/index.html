@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INCEPTION // PASIV TERMINAL — ssukhija</title>
+    <style>
+        :root {
+            --bg: #070b12;
+            --panel: #0d1522;
+            --border: #1e3a5f;
+            --accent: #38bdf8;
+            --glow: rgba(56, 189, 248, 0.35);
+            --text: #cbd5e1;
+            --muted: #64748b;
+            --ok: #4ade80;
+        }
+
+        /* "THE KICK" — Pure CSS theme flip via hidden checkbox */
+        #kick-toggle:checked ~ .terminal {
+            --bg: #120c05;
+            --panel: #1c1308;
+            --border: #78350f;
+            --accent: #f59e0b;
+            --glow: rgba(245, 158, 11, 0.4);
+            --text: #fef3c7;
+            --muted: #b45309;
+            --ok: #fbbf24;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #020408;
+            font-family: "Courier New", Courier, monospace;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        #kick-toggle { display: none; }
+
+        .terminal {
+            width: 100%;
+            max-width: 820px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            box-shadow: 0 0 35px var(--glow), inset 0 0 60px rgba(0, 0, 0, 0.85);
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s ease;
+        }
+
+        /* Retro CRT Scanline Overlay */
+        .terminal::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0, 0, 0, 0.28) 3px,
+                rgba(0, 0, 0, 0.28) 4px
+            );
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .title-block h1 {
+            font-size: 1.35rem;
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--glow);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 9px;
+            height: 1em;
+            background: var(--accent);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Pure-CSS Spinning Totem */
+        .totem-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .totem {
+            width: 28px;
+            height: 32px;
+            position: relative;
+            animation: wobble 2.4s ease-in-out infinite;
+        }
+
+        .totem::before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 2px;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 18px solid var(--accent);
+            filter: drop-shadow(0 0 6px var(--glow));
+        }
+
+        .totem::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 12px;
+            width: 4px;
+            height: 6px;
+            background: var(--accent);
+        }
+
+        .kick-btn {
+            cursor: pointer;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.45rem 0.85rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px var(--glow);
+            transition: background 0.2s, color 0.2s;
+            user-select: none;
+        }
+
+        .kick-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .quote {
+            border-left: 3px solid var(--accent);
+            padding-left: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.88rem;
+            color: var(--text);
+            font-style: italic;
+        }
+
+        /* Nested Dream Layers */
+        .layer {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            margin-top: 0.9rem;
+            position: relative;
+            transition: border-color 0.25s;
+        }
+
+        .layer:hover {
+            border-color: var(--accent);
+        }
+
+        .layer-tag {
+            font-size: 0.72rem;
+            color: var(--accent);
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .status {
+            color: var(--ok);
+            font-weight: bold;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .node {
+            border: 1px dashed var(--border);
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .node h3 {
+            font-size: 0.92rem;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .node p {
+            font-size: 0.78rem;
+            line-height: 1.45;
+        }
+
+        /* Interactive Expandable Architecture Notes (<details>) */
+        details {
+            margin-top: 1.25rem;
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            background: var(--panel);
+        }
+
+        summary {
+            cursor: pointer;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        details p {
+            margin-top: 0.65rem;
+            font-size: 0.82rem;
+            line-height: 1.55;
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            padding-top: 0.85rem;
+            border-top: 1px dashed var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--muted);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-7deg) scaleX(1); }
+            25% { transform: rotate(4deg) scaleX(0.75); }
+            50% { transform: rotate(7deg) scaleX(1); }
+            75% { transform: rotate(-4deg) scaleX(0.75); }
+        }
+    </style>
+</head>
+<body>
+
+<input type="checkbox" id="kick-toggle">
+
+<div class="terminal">
+    <header>
+        <div class="title-block">
+            <h1>PASIV // INCEPTION_OS <span class="cursor"></span></h1>
+            <div class="subtitle">OPERATOR: ssukhija | KERNEL: DEBIAN BOOKWORM | PHP: NONE</div>
+        </div>
+        <div class="totem-box">
+            <div class="totem" title="Reality Totem"></div>
+            <label for="kick-toggle" class="kick-btn">[ TRIGGER KICK ]</label>
+        </div>
+    </header>
+
+    <div class="quote">
+        "We need to go deeper." — Virtualizing isolated containers inside a Debian VM without a full hypervisor per service.
+    </div>
+
+    <div class="layer">
+        <div class="layer-tag">
+            <span>LEVEL 01 // HOST REALITY (VIRTUALBOX DEBIAN VM)</span>
+            <span class="status">[ANCHORED]</span>
+        </div>
+        <p style="font-size: 0.82rem;">Persistent bind volumes mounted at <code>/home/ssukhija/data/</code></p>
+
+        <div class="layer">
+            <div class="layer-tag">
+                <span>LEVEL 02 // SUBCONSCIOUS BRIDGE (inceptNet)</span>
+                <span class="status">[ISOLATED]</span>
+            </div>
+            <p style="font-size: 0.82rem;">Internal DNS resolution &amp; port isolation (Port 80 blocked; TLSv1.3 on 443)</p>
+
+            <div class="layer">
+                <div class="layer-tag">
+                    <span>LEVEL 03 // ACTIVE CONTAINERS (LIMBO LAYER)</span>
+                    <span class="status">[5 ONLINE]</span>
+                </div>
+
+                <div class="services-grid">
+                    <div class="node">
+                        <h3>&gt; NGINX [:443]</h3>
+                        <p>TLSv1.3 perimeter gateway &amp; FastCGI reverse proxy.</p>
+                    </div>
+                    <div class="node">
+                        <h3>&gt; WORDPRESS [:9000]</h3>
+                        <p>PHP-FPM 8.2 engine serving <code>ssukhija.42.fr</code>.</p>
+                    </div>
+                    <div class="node">
+                        <h3>&gt; MARIADB [:3306]</h3>
+                        <p>Relational state persistence on internal network only.</p>
+                    </div>
+                    <div class="node">
+                        <h3>&gt; ADMINER [:8080]</h3>
+                        <p>Bonus DB inspection console over <code>inceptNet</code>.</p>
+                    </div>
+                    <div class="node">
+                        <h3>&gt; STATIC_SITE [:8081]</h3>
+                        <p>Bonus pure HTML/CSS terminal served via Python HTTP.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <details>
+        <summary>&gt; INSPECT ARCHITECTURAL PARADOX (WHY CONTAINERS ≠ VMs)</summary>
+        <p>
+            Unlike nested Virtual Machines—where each dream level requires booting an entire guest OS kernel—Docker containers share the host Linux kernel using namespaces and cgroups. Each level remains isolated while keeping startup time under one second.
+        </p>
+    </details>
+
+    <footer>
+        <span>42 CURRICULUM // INCEPTION</span>
+        <span>TOTEM STATUS: SPINNING</span>
+    </footer>
+</div>
+
+</body>
+</html>

@@ -132,3 +132,21 @@ Because existing directories and config files are skipped on subsequent boots, a
 * **Docker Secrets:** Sensitive credentials in `secrets/` are mounted read-only in memory at `/run/secrets/` (`db_root_password`, `db_password`, `wp_creds`) rather than baked into image layers or passed as plain environment variables.
 * **PID 1 Execution:** Every `entrypoint.sh` ends with `exec` (`exec mariadb`, `exec php-fpm8.2 -F`, `exec nginx -g "daemon off;"`) so the primary daemon runs in the foreground as PID 1 and receives `SIGTERM` signals cleanly during shutdown.
 
+## Bonus Services Architecture
+
+Two additional containers are built from custom `debian:bookworm` Dockerfiles under `srcs/requirements/bonus/` and attached to the `inceptNet` bridge network:
+
+1. **`adminer` (`srcs/requirements/bonus/adminer/Dockerfile`)**
+   * Installs `php` and `php-mysqli`, fetches the standalone Adminer PHP release, and runs PHP's built-in web server in the foreground on port `8080`.
+   * Communicates with the `mariadb` container internally over `inceptNet` using the `mariadb` service hostname.
+   * Requires no persistent host volume.
+
+2. **`static_site` (`srcs/requirements/bonus/static_site/Dockerfile`)**
+   * Copies `index.html` into `/var/www/static` and serves it using `python3 -m http.server 8081 with zero PHP dependencies.
+   * Requires no persistent host volume.
+
+### Managing Bonus Services Individually
+To rebuild or inspect logs for a single bonus service without restarting the entire stack:
+```bash
+docker compose -f srcs/docker-compose.yml up --build -d adminer
+docker compose -f srcs/docker-compose.yml logs -f static_site

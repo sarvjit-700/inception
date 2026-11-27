@@ -83,7 +83,22 @@ All configuration and password files live locally on the host and are excluded f
    ```
    A healthy stack returns `HTTP/1.1 200 ok`.
 
+## Bonus Services Access
 
+In addition to the main WordPress site (`https://ssukhija.42.fr`), the stack exposes two standalone bonus services:
+
+* **Adminer (Database Management UI):**
+  * **URL:** `http://ssukhija.42.fr:8080` (or `http://localhost:8080`)
+  * **Login Credentials:**
+    * **System:** `MySQL`
+    * **Server:** `mariadb`
+    * **Username:** Your `MYSQL_USER` value (from `.env` / secrets)
+    * **Password:** Your `MYSQL_PASSWORD` value
+    * **Database:** Your `MYSQL_DATABASE` value
+
+* **Static Showcase Website:**
+  * **URL:** `http://ssukhija.42.fr:8081` (or `http://localhost:8081`)
+  * **Description:** A lightweight static HTML/CSS showcase page served without PHP.
 
 
 
